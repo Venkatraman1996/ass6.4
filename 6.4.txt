@@ -1,0 +1,27 @@
+1)the following are the series of commands to find the average age of male and female persons died in the titanic tragedy is
+*to create a relations for given details
+  Titanic = load '/TitanicData.txt' using PigStorage(',') as (PassengerId:int,Survived :int,Pclass,Name,Sex:chararray,Age:int,Sibsp,Parch,Ticket,Fare,Cabin,Embarked);
+*to filter dead people
+dead = filter Titanic by Survived == 1;
+*to filter male dead
+mdead = filter dead by Sex == 'male';
+*to filter female dead
+fdead = filter dead by Sex == 'female';
+*group the male and female
+grpm = group mdead all;
+grpf= group fdead all;
+*to find the avg
+MAle average = foreach grpm generate AVG(mdead.Age);
+FeMAle average = foreach grpf generate AVG(fdead.Age);
+================================================================================================================================================================================
+
+2)the following are the series of commands  to find the number of people died and survived in each class:
+Titanic = load '/TitanicData.txt' using PigStorage(',') as (PassengerId:int,Survived :int,Pclass,Name,Sex:chararray,Age:int,Sibsp,Parch,Ticket,Fare,Cabin,Embarked);
+*to filter dead people
+dead = filter Titanic by Survived == 1;
+*to filter alive people
+alive = filter Titanic by Survived == 0;
+*Groupalive = group alive by Pclass;
+*Groupdead = group dead by Pclass;
+*nosurvivedineachclass = foreach Groupalive generate COUNT(alive.PassengerId);  
+*nodeadineachclass = foreach Groupdead generate COUNT(dead.PassengerId);  
